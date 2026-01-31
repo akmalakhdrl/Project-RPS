@@ -5,7 +5,7 @@
  * Dengan 3 opsi: Simpan JSON, Download DOCX, Generate AI
  */
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { generateRPS } from '../services/api'
 import '../styles/RPSForm.css'
 
@@ -29,6 +29,9 @@ function RPSForm({ onRPSGenerated, isLoading, setIsLoading }) {
 
   // State untuk error message
   const [error, setError] = useState('')
+
+  // Ref untuk file input (Load JSON)
+  const fileInputRef = useRef(null)
 
   /**
    * Handle perubahan input
@@ -154,6 +157,55 @@ function RPSForm({ onRPSGenerated, isLoading, setIsLoading }) {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  /**
+   * Muat data dari file JSON
+   */
+  const handleLoadJSON = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const json = JSON.parse(event.target.result)
+        
+        // Pemetaan data dari JSON ke state formData
+        const newFormData = {
+          namaMataKuliah: json.identitasMataKuliah?.namaMataKuliah || '',
+          kodeMataKuliah: json.identitasMataKuliah?.kodeMataKuliah || '',
+          semester: json.identitasMataKuliah?.semester || '',
+          sks: json.identitasMataKuliah?.sks || '',
+          programStudi: json.identitasMataKuliah?.programStudi || '',
+          dosenPengampu: json.identitasMataKuliah?.dosenPengampu || '',
+          deskripsiMataKuliah: json.deskripsiMataKuliah || '',
+          cplProdi: Array.isArray(json.capaianPembelajaran?.cplProdi) ? json.capaianPembelajaran.cplProdi.join(', ') : '',
+          cpmk: Array.isArray(json.capaianPembelajaran?.cpmk) ? json.capaianPembelajaran.cpmk.join(', ') : '',
+          subCpmk: '', // Biasanya dihandle otomatis/AI
+          bahanKajian: Array.isArray(json.bahanKajian) ? json.bahanKajian.join(', ') : '',
+          metodePembelajaran: Array.isArray(json.metodePembelajaran) ? json.metodePembelajaran.join(', ') : '',
+          mediaDanSumber: Array.isArray(json.mediaDanSumber) ? json.mediaDanSumber.join(', ') : '',
+        }
+
+        setFormData(newFormData)
+        alert('✅ Data RPS berhasil dimuat dari JSON!')
+      } catch (err) {
+        setError('Gagal membaca file JSON: Format tidak valid')
+        console.error(err)
+      }
+    }
+    reader.readAsText(file)
+    
+    // Reset input supaya bisa load file yang sama lagi jika perlu
+    e.target.value = null
+  }
+
+  /**
+   * Trigger klik file input
+   */
+  const triggerFileInput = () => {
+    fileInputRef.current?.click()
   }
 
   /**
@@ -369,6 +421,29 @@ function RPSForm({ onRPSGenerated, isLoading, setIsLoading }) {
                 <small>Simpan data form tanpa AI</small>
               </div>
             </button>
+
+            {/* Tombol Muat JSON */}
+            <button
+              type="button"
+              onClick={triggerFileInput}
+              className="btn-action btn-load"
+              disabled={isLoading}
+            >
+              <span className="btn-icon">📁</span>
+              <div className="btn-text">
+                <strong>Muat dari JSON</strong>
+                <small>Upload file RPS JSON</small>
+              </div>
+            </button>
+
+            {/* Hidden File Input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleLoadJSON}
+              accept=".json"
+              style={{ display: 'none' }}
+            />
 
             {/* Tombol Generate DOCX */}
             <button
