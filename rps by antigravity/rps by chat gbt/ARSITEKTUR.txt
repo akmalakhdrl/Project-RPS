@@ -1,0 +1,445 @@
+═══════════════════════════════════════════════════════════════════════
+    ARSITEKTUR SISTEM RPS (Rencana Pembelajaran Semester)
+═══════════════════════════════════════════════════════════════════════
+
+📌 KONSEP DASAR
+─────────────────────────────────────────────────────────────────────
+
+Aplikasi ini dibagi menjadi 2 bagian yang TERPISAH tapi SALING KOMUNIKASI:
+
+1. FRONTEND (Client Side) - Tampilan yang dilihat user
+2. BACKEND (Server Side) - Otak yang memproses data
+
+Keduanya berkomunikasi via HTTP Request (seperti kirim surat bolak-balik)
+
+
+═══════════════════════════════════════════════════════════════════════
+    DIAGRAM ARSITEKTUR LENGKAP
+═══════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER / DOSEN                             │
+│                    (Buka di Browser)                             │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       FRONTEND                                   │
+│                   (React + Vite)                                 │
+│                  Port: 3000                                      │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────┐     │
+│   │              App.jsx                                  │     │
+│   │     (Komponen Utama - Manage State)                   │     │
+│   │                                                        │     │
+│   │    ┌─────────────────┐      ┌─────────────────┐      │     │
+│   │    │   RPSForm.jsx   │      │ RPSResult.jsx   │      │     │
+│   │    │                 │      │                 │      │     │
+│   │    │ - Input form    │      │ - Show hasil   │      │     │
+│   │    │ - Validasi      │      │ - Download     │      │     │
+│   │    │ - Submit data   │      │   button       │      │     │
+│   │    └────────┬────────┘      └────────▲────────┘      │     │
+│   │             │                        │               │     │
+│   └─────────────┼────────────────────────┼───────────────┘     │
+│                 │                        │                      │
+│                 ▼                        │                      │
+│   ┌──────────────────────────────────────────────────────┐     │
+│   │              api.js                                   │     │
+│   │     (Service untuk komunikasi ke Backend)             │     │
+│   │                                                        │     │
+│   │  - generateRPS(data)  → POST ke backend               │     │
+│   │  - downloadJSON(file) → GET file JSON                 │     │
+│   │  - downloadDOCX(file) → GET file DOCX                 │     │
+│   └────────────────────┬──────────────────────────────────┘     │
+│                        │                                        │
+└────────────────────────┼────────────────────────────────────────┘
+                         │
+                         │ HTTP Request
+                         │ (axios)
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       BACKEND                                    │
+│                 (Node.js + Express)                              │
+│                    Port: 5000                                    │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────┐     │
+│   │            server.js                                  │     │
+│   │    (File Utama - Jalankan Express Server)             │     │
+│   │                                                        │     │
+│   │  - Setup middleware (CORS, JSON parser)               │     │
+│   │  - Define routes                                      │     │
+│   │  - Listen di port 5000                                │     │
+│   └────────────────────┬──────────────────────────────────┘     │
+│                        │                                        │
+│                        ▼                                        │
+│   ┌──────────────────────────────────────────────────────┐     │
+│   │         routes/rpsRoutes.js                           │     │
+│   │    (Definisi Endpoint - URL yang bisa diakses)        │     │
+│   │                                                        │     │
+│   │  POST   /api/rps/generate                             │     │
+│   │  GET    /api/rps/download/json/:filename              │     │
+│   │  GET    /api/rps/download/docx/:filename              │     │
+│   └────────────────────┬──────────────────────────────────┘     │
+│                        │                                        │
+│                        ▼                                        │
+│   ┌──────────────────────────────────────────────────────┐     │
+│   │      controllers/rpsController.js                     │     │
+│   │    (Logika Bisnis - Otak dari Backend)                │     │
+│   │                                                        │     │
+│   │  - generateRPS()    → Proses generate RPS             │     │
+│   │  - downloadJSON()   → Kirim file JSON                 │     │
+│   │  - downloadDOCX()   → Kirim file DOCX                 │     │
+│   └──────────┬────────────────────────┬───────────────────┘     │
+│              │                        │                         │
+│              ▼                        ▼                         │
+│   ┌────────────────────┐   ┌────────────────────┐              │
+│   │  services/         │   │  services/         │              │
+│   │  aiService.js      │   │  docxService.js    │              │
+│   │                    │   │                    │              │
+│   │ - Connect OpenAI   │   │ - Generate DOCX   │              │
+│   │ - Create prompt    │   │ - Format dokumen  │              │
+│   │ - Get AI response  │   │ - Save file       │              │
+│   └──────────┬─────────┘   └─────────┬──────────┘              │
+│              │                       │                         │
+│              ▼                       ▼                         │
+│   ┌──────────────────────────────────────────────────────┐     │
+│   │              outputs/                                 │     │
+│   │    (Folder untuk simpan file hasil)                   │     │
+│   │                                                        │     │
+│   │  - rps_IF101_timestamp.json                           │     │
+│   │  - rps_IF101_timestamp.docx                           │     │
+│   └──────────────────────────────────────────────────────┘     │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+                         │
+                         │ API Call
+                         │
+                         ▼
+              ┌────────────────────┐
+              │   OPENAI API       │
+              │  (GPT-3.5/GPT-4)   │
+              │                    │
+              │ Generate konten:   │
+              │ - Deskripsi        │
+              │ - CPL/CPMK         │
+              │ - Rencana minggu   │
+              │ - Penilaian        │
+              └────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════
+    ALUR KERJA SISTEM (Step by Step)
+═══════════════════════════════════════════════════════════════════════
+
+Step 1: USER mengisi form di browser
+   ↓
+   User input data mata kuliah:
+   - Nama, kode, semester, SKS
+   - Deskripsi (opsional)
+   - CPL, CPMK (opsional)
+   - Metode, media (opsional)
+
+Step 2: USER klik tombol "Generate RPS"
+   ↓
+   RPSForm.jsx:
+   - Validasi data
+   - Format data ke JSON
+   - Set loading state = true
+
+Step 3: FRONTEND kirim data ke BACKEND
+   ↓
+   api.js:
+   - axios.post('http://localhost:5000/api/rps/generate', data)
+   - Kirim via HTTP POST
+
+Step 4: BACKEND terima request
+   ↓
+   server.js → rpsRoutes.js → rpsController.js
+   - Parse JSON dari request body
+   - Validasi data
+
+Step 5: BACKEND panggil AI Service
+   ↓
+   aiService.js:
+   - Buat prompt untuk OpenAI
+   - Kirim request ke OpenAI API
+   - Terima response (konten RPS)
+   - Parse & format response
+
+Step 6: BACKEND generate file JSON
+   ↓
+   rpsController.js:
+   - Gabungkan data input + AI response
+   - Save ke file JSON di folder outputs/
+   - Generate filename: rps_[kode]_[timestamp].json
+
+Step 7: BACKEND generate file DOCX
+   ↓
+   docxService.js:
+   - Buat dokumen Word baru
+   - Format heading, paragraf, tabel
+   - Save ke file DOCX di folder outputs/
+   - Generate filename: rps_[kode]_[timestamp].docx
+
+Step 8: BACKEND kirim response ke FRONTEND
+   ↓
+   Response JSON:
+   {
+     success: true,
+     message: "RPS berhasil digenerate",
+     data: { ... data RPS lengkap ... },
+     files: {
+       json: "rps_IF101_1234567890.json",
+       docx: "rps_IF101_1234567890.docx"
+     }
+   }
+
+Step 9: FRONTEND terima response
+   ↓
+   api.js → RPSForm.jsx → App.jsx
+   - Set loading = false
+   - Update state dengan data hasil
+   - Switch tampilan ke RPSResult
+
+Step 10: USER lihat hasil
+   ↓
+   RPSResult.jsx:
+   - Tampilkan preview RPS
+   - Show download button JSON & DOCX
+
+Step 11: USER klik download
+   ↓
+   api.js:
+   - Buka URL download di tab baru
+   - GET http://localhost:5000/api/rps/download/[json|docx]/[filename]
+   - Browser auto-download file
+
+
+═══════════════════════════════════════════════════════════════════════
+    PENJELASAN DETAIL SETIAP LAYER
+═══════════════════════════════════════════════════════════════════════
+
+📱 FRONTEND LAYER
+─────────────────────────────────────────────────────────────────────
+
+1. App.jsx - Komponen Utama
+   • Manage state aplikasi (rpsResult, isLoading)
+   • Conditional rendering: tampilkan Form atau Result
+   • Parent component yang mengatur child components
+
+2. RPSForm.jsx - Form Input
+   • State management untuk form data
+   • Handle input changes
+   • Validasi form sebelum submit
+   • Kirim data ke backend via api.js
+   • Show loading indicator
+
+3. RPSResult.jsx - Tampilan Hasil
+   • Terima props (result) dari App.jsx
+   • Render preview RPS
+   • Button download JSON & DOCX
+   • Button buat RPS baru
+
+4. api.js - Service Layer
+   • Centralized API calls
+   • Base URL konfigurasi
+   • Error handling
+   • Axios untuk HTTP request
+
+
+🔧 BACKEND LAYER
+─────────────────────────────────────────────────────────────────────
+
+1. server.js - Entry Point
+   • Inisialisasi Express app
+   • Setup middleware (CORS, JSON parser)
+   • Register routes
+   • Start server di port 5000
+
+2. routes/rpsRoutes.js - URL Mapping
+   • Definisi endpoint
+   • Map URL ke controller function
+   • HTTP method (GET, POST)
+
+3. controllers/rpsController.js - Business Logic
+   • Receive & validate request
+   • Call services (AI, DOCX)
+   • Error handling
+   • Send response
+
+4. services/aiService.js - AI Integration
+   • Connect ke OpenAI API
+   • Build prompt dari data input
+   • Parse AI response
+   • Return structured data
+
+5. services/docxService.js - Document Generation
+   • Create Word document
+   • Format content (header, paragraph, table)
+   • Style document
+   • Save to file
+
+
+═══════════════════════════════════════════════════════════════════════
+    KOMUNIKASI ANTAR KOMPONEN
+═══════════════════════════════════════════════════════════════════════
+
+FRONTEND ke BACKEND:
+────────────────────
+HTTP POST /api/rps/generate
+Headers: Content-Type: application/json
+Body: { namaMataKuliah, kodeMataKuliah, ... }
+
+BACKEND ke FRONTEND:
+────────────────────
+HTTP 200 OK
+Headers: Content-Type: application/json
+Body: { success, message, data, files }
+
+BACKEND ke AI:
+──────────────
+HTTPS POST https://api.openai.com/v1/chat/completions
+Headers: Authorization: Bearer [API_KEY]
+Body: { model, messages, temperature, max_tokens }
+
+
+═══════════════════════════════════════════════════════════════════════
+    TEKNOLOGI & LIBRARY
+═══════════════════════════════════════════════════════════════════════
+
+FRONTEND:
+─────────
+• React 18        → UI library
+• Vite            → Build tool
+• Axios           → HTTP client
+• CSS3            → Styling
+
+BACKEND:
+────────
+• Node.js         → Runtime
+• Express 4       → Web framework
+• OpenAI SDK      → AI integration
+• docx            → Word generation
+• CORS            → Cross-origin handling
+• dotenv          → Environment config
+
+
+═══════════════════════════════════════════════════════════════════════
+    SECURITY & BEST PRACTICES
+═══════════════════════════════════════════════════════════════════════
+
+1. Environment Variables (.env)
+   • API Key disimpan aman
+   • Tidak di-commit ke Git
+   • Beda config untuk dev/prod
+
+2. Input Validation
+   • Frontend: client-side validation
+   • Backend: server-side validation
+   • Prevent injection attacks
+
+3. Error Handling
+   • Try-catch blocks
+   • User-friendly error messages
+   • Log errors untuk debugging
+
+4. CORS Configuration
+   • Allow specific origins
+   • Secure headers
+   • Prevent unauthorized access
+
+
+═══════════════════════════════════════════════════════════════════════
+    FOLDER STRUCTURE DETAIL
+═══════════════════════════════════════════════════════════════════════
+
+rps by chat gbt/
+│
+├── backend/                    # Server-side code
+│   ├── server.js              # ★ Entry point backend
+│   ├── package.json           # Dependencies list
+│   ├── .env.example           # Template config
+│   ├── .env                   # ★ Config (API Key) - DON'T COMMIT!
+│   │
+│   ├── routes/                # URL routing
+│   │   └── rpsRoutes.js       # Define endpoints
+│   │
+│   ├── controllers/           # Business logic
+│   │   └── rpsController.js   # Handle requests
+│   │
+│   ├── services/              # External services
+│   │   ├── aiService.js       # OpenAI integration
+│   │   └── docxService.js     # Document generation
+│   │
+│   └── outputs/               # Generated files
+│       ├── .gitkeep           # Keep folder in Git
+│       ├── *.json             # JSON outputs
+│       └── *.docx             # Word outputs
+│
+└── frontend/                   # Client-side code
+    ├── index.html             # HTML template
+    ├── package.json           # Dependencies list
+    ├── vite.config.js         # Vite configuration
+    │
+    └── src/                   # Source code
+        ├── main.jsx           # ★ Entry point React
+        ├── App.jsx            # ★ Main component
+        │
+        ├── components/        # React components
+        │   ├── RPSForm.jsx    # Form input
+        │   └── RPSResult.jsx  # Show result
+        │
+        ├── services/          # API layer
+        │   └── api.js         # Backend communication
+        │
+        └── styles/            # CSS files
+            ├── index.css      # Global styles
+            ├── App.css        # App component
+            ├── RPSForm.css    # Form styles
+            └── RPSResult.css  # Result styles
+
+
+═══════════════════════════════════════════════════════════════════════
+    DEPENDENCY GRAPH
+═══════════════════════════════════════════════════════════════════════
+
+FRONTEND Dependencies:
+  react → react-dom
+  vite → @vitejs/plugin-react
+  axios (untuk HTTP request)
+
+BACKEND Dependencies:
+  express (web framework)
+   ├── cors (CORS handling)
+   └── dotenv (env variables)
+  openai (AI SDK)
+  docx (Word generation)
+
+
+═══════════════════════════════════════════════════════════════════════
+    TIPS UNTUK BELAJAR
+═══════════════════════════════════════════════════════════════════════
+
+1. Mulai dari README.md untuk overview
+2. Baca QUICK_START.md untuk setup cepat
+3. Pelajari backend dulu (lebih mudah dipahami)
+4. Lanjut frontend (konsep React butuh waktu)
+5. Debug dengan console.log() di setiap step
+6. Gunakan browser DevTools (F12) untuk inspect
+7. Coba ubah-ubah kode, lihat apa yang terjadi
+8. Jangan takut error, itu bagian dari belajar!
+
+
+═══════════════════════════════════════════════════════════════════════
+    CONTACT & SUPPORT
+═══════════════════════════════════════════════════════════════════════
+
+Dokumentasi lengkap:
+• Backend: backend/README.md
+• Frontend: frontend/README.md
+• Quick Start: QUICK_START.md
+
+Jika ada yang bingung, baca dokumentasi atau tanya dosen/teman! 🙋‍♂️
+
+Happy Coding! 🚀

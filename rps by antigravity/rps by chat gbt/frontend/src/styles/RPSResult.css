@@ -1,0 +1,370 @@
+/**
+ * RPSRESULT.CSS - Styles untuk komponen Result
+ */
+
+.rps-result-container {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Result Header */
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.result-header h2 {
+  color: var(--success-color);
+  margin: 0;
+}
+
+.btn-new {
+  background-color: var(--text-secondary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+}
+
+.btn-new:hover {
+  background-color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+/* Download Section */
+.download-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  border: 3px solid var(--primary-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.download-section h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-2xl);
+}
+
+.download-info {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-base);
+}
+
+.download-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.btn-download {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  text-align: left;
+}
+
+.btn-download:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-download .btn-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.btn-download .btn-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.btn-download strong {
+  display: block;
+  font-size: var(--font-size-lg);
+}
+
+.btn-download small {
+  display: block;
+  opacity: 0.8;
+  font-weight: normal;
+  font-size: var(--font-size-sm);
+}
+
+.btn-json {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.btn-json:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.btn-json-save {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.btn-json-save:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.btn-docx {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+}
+
+.btn-docx:hover {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, #1e3a8a 100%);
+}
+
+.files-info {
+  background-color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-lg);
+}
+
+.files-info strong {
+  color: var(--primary-color);
+  font-size: var(--font-size-lg);
+}
+
+.files-info ul {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--spacing-sm);
+}
+
+.files-info li {
+  padding: var(--spacing-xs);
+  color: var(--text-primary);
+  font-family: monospace;
+  font-size: var(--font-size-sm);
+}
+
+/* Preview Section */
+.rps-preview {
+  margin-top: var(--spacing-lg);
+}
+
+.rps-preview > h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-2xl);
+}
+
+.preview-section {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background-color: var(--bg-color);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--primary-color);
+}
+
+.preview-section h4 {
+  color: var(--secondary-color);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-xl);
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.info-item strong {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item span {
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+}
+
+/* Description */
+.description {
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-size: var(--font-size-base);
+}
+
+/* Lists */
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  background-color: white;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary-color);
+}
+
+/* Sub-CPMK */
+.sub-cpmk {
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: white;
+  border-radius: var(--radius-md);
+}
+
+.sub-cpmk strong {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--secondary-color);
+}
+
+/* Penilaian Grid */
+.penilaian-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.penilaian-item {
+  background-color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  text-align: center;
+  border: 2px solid var(--border-color);
+}
+
+.penilaian-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.penilaian-value {
+  display: block;
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Pertemuan */
+.pertemuan-list {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.pertemuan-item {
+  background-color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.pertemuan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pertemuan-header strong {
+  color: var(--primary-color);
+  font-size: var(--font-size-lg);
+}
+
+.waktu {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.pertemuan-content p {
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.6;
+}
+
+.pertemuan-content strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Footer */
+.result-footer {
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 2px solid var(--border-color);
+  text-align: center;
+}
+
+.result-footer p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .result-header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
+  
+  .btn-new {
+    width: 100%;
+  }
+  
+  .download-section {
+    padding: var(--spacing-md);
+  }
+  
+  .download-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .btn-download {
+    width: 100%;
+  }
+  
+  .btn-download .btn-icon {
+    font-size: 2rem;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .penilaian-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

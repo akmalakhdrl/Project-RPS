@@ -1,0 +1,240 @@
+/**
+ * RPSFORM.CSS - Styles untuk komponen Form
+ */
+
+.rps-form-container {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.rps-form-container h2 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.form-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--bg-color);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--primary-color);
+}
+
+/* Error Message */
+.error-message {
+  background-color: #fee2e2;
+  color: var(--danger-color);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  border-left: 4px solid var(--danger-color);
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.form-section:last-child {
+  border-bottom: none;
+}
+
+.form-section h3 {
+  color: var(--secondary-color);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-xl);
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group small {
+  display: block;
+  margin-top: var(--spacing-xs);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* Form Row (untuk layout 2 kolom) */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Form Actions */
+.form-actions {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--primary-color);
+}
+
+.actions-title {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-xl);
+  text-align: center;
+}
+
+.actions-subtitle {
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+.btn-action:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-action .btn-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.btn-action .btn-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.btn-action strong {
+  display: block;
+  font-size: var(--font-size-lg);
+}
+
+.btn-action small {
+  display: block;
+  opacity: 0.9;
+  font-weight: normal;
+  font-size: var(--font-size-sm);
+}
+
+.btn-json {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.btn-json:hover:not(:disabled) {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.btn-docx {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.btn-docx:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.btn-ai {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+}
+
+.btn-ai:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, #1e3a8a 100%);
+}
+
+/* Hapus style btn-generate lama */
+.btn-generate {
+  display: none;
+}
+
+/* Loading Message */
+.loading-message {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--bg-color);
+  border-radius: var(--radius-md);
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rps-form-container {
+    padding: var(--spacing-md);
+  }
+  
+  .action-buttons-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .btn-action {
+    width: 100%;
+  }
+}
